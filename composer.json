@@ -1,12 +1,12 @@
 {
-    "name": "bolt/redirector",
+    "name": "luxnewcms/bolt-redirector",
     "description": "🔄 This Bolt extension adds redirects using YAML",
     "type": "bolt-extension",
     "license": "MIT",
     "authors": [
         {
-            "name": "Ivo Valchev",
-            "email": "me@ivovalchev.com"
+            "name": "Roman Hanoshenko",
+            "email": "roman.hanoshenko@dxc.com"
         }
     ],
     "require": {
