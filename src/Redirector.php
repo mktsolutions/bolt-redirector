@@ -7,6 +7,8 @@ class Redirector
     /** @var Config */
     private $config;
 
+    private $statusCode = 301;
+
     public function __construct(Config $config)
     {
         $this->config = $config;
@@ -14,11 +16,15 @@ class Redirector
 
     public function findFor(array $locations): ?string
     {
-        $redirects = $this->config->getRedirects();
-        $redirectKey = current(array_intersect($locations, array_keys($redirects)));
+        $setup = $this->config->getRedirects();
 
-        if ($redirectKey) {
-            return $this->config->getRedirects()[$redirectKey];
+        foreach ($setup as $statusCode => $redirects) {
+            $redirectKey = current(array_intersect($locations, array_keys($redirects)));
+
+            if ($redirectKey) {
+                $this->statusCode = $statusCode;
+                return $redirects[$redirectKey];
+            }
         }
 
         return null;
@@ -26,6 +32,6 @@ class Redirector
 
     public function getStatusCode(): int
     {
-        return $this->config->getStatusCode();
+        return $this->statusCode;
     }
 }
