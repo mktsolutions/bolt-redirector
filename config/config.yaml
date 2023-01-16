@@ -1,13 +1,8 @@
 # Redirector extension configuration file
 
-# The default status code is 302
-#status_code: 301
+#301:
+#  '/my-custom-page': '/redirect-here'
+#  '/another-redirect': 'https://google.com'
 
-#redirects:
-#  from: to
-#
-# from can be the full URI or the absolute path,
-# e.g. https://example.org/page/about or /page/about
-#
-# "https://example.org/page/about: "/page/about-us"
-# "/page/mission": "/page/our-mission"
+#302:
+#  '/redirect-with-another-status-code': '/redirect-to-another-page'
