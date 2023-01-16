@@ -6,6 +6,8 @@ namespace BoltRedirector;
 
 use Bolt\Extension\ExtensionRegistry;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Yaml;
 
 class Config
 {
@@ -25,7 +27,7 @@ class Config
 
     public function getRedirects(): array
     {
-        return $this->getConfig()['redirects'] ?? [];
+        return $this->getConfig();
     }
 
     public function getStatusCode(): int
@@ -45,22 +47,25 @@ class Config
             return [];
         }
 
-        $config = $extension->getConfig()->toArray();
-        $redirects = isset($config['redirects']) ? $config['redirects'] : [];
-        $statusCode = isset($config['status_code']) ? $config['status_code'] : Response::HTTP_FOUND;
-        $tempConfig = [
-            'redirects' => [],
-            'status_code' => $statusCode,
-        ];
+        $config = [];
 
-        // Iterate over array, ensure we don't have trailing slashes (in keys and values alike)
-        foreach($redirects as $from => $to) {
-            $tempConfig['redirects'][rtrim($from, '/')] = rtrim($to, '/');
+        $filenames = $extension->getConfigFilenames();
+
+        $yamlParser = new Parser();
+
+        foreach ($filenames as $filename) {
+            if (is_readable($filename)) {
+                $parsed = Yaml::parse(file_get_contents($filename));
+
+                foreach ($parsed as $statusCode => $redirects) {
+                    $config[$statusCode] = $redirects;
+                }
+            }
         }
 
-        $this->config = array_replace_recursive($this->getDefault(), $tempConfig);
+        $this->config = $config;
 
-        return $this->config;
+        return $config;
     }
 
     private function getExtension()
