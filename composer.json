@@ -1,5 +1,5 @@
 {
-    "name": "luxnewcms/bolt-redirector",
+    "name": "luxnewcms2/bolt-redirector",
     "description": "🔄 This Bolt extension adds redirects using YAML",
     "type": "bolt-extension",
     "license": "MIT",
