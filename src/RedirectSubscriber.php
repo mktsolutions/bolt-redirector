@@ -7,6 +7,7 @@ namespace BoltRedirector;
 use Bolt\Widget\Injector\RequestZone;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -37,7 +38,11 @@ class RedirectSubscriber implements EventSubscriberInterface
         $redirect = $this->redirector->findFor($locations);
 
         if ($redirect) {
-            $event->setResponse(new RedirectResponse($redirect, $this->redirector->getStatusCode()));
+            if ($this->redirector->getStatusCode() >= 400 && $this->redirector->getStatusCode() < 500) {
+                $event->setResponse(new Response('', $this->redirector->getStatusCode()));
+            } else {
+                $event->setResponse(new RedirectResponse($redirect, $this->redirector->getStatusCode()));
+            }
         }
     }
 
