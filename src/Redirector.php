@@ -25,7 +25,7 @@ class Redirector
 
                 if ($redirectKey) {
                     $this->statusCode = $statusCode;
-                    return $redirects[$redirectKey];
+                    return 'redirect';
                 }
             } else {
                 $redirectKey = current(array_intersect($locations, array_keys($redirects)));
